@@ -1,1 +1,5 @@
 .env
+valid_companies.csv
+sample data.csv
+proof of concept/__pycache__
+.vscode

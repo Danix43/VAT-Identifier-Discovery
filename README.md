@@ -16,6 +16,8 @@
 
 ### Functionare
 
+#### START -> Genereaza CRN numbers -> Cauta numerele generate in Uk Registery -> Cauta site-ul daca exista o companie valida -> Scrap the site pentru VAT number -> Verifica VAT number pe HMRC -> Salveaza rezultatele -> END
+
 1. Genereaza Company Registragion Numbers (CRNs); 8 chars long, poate incepe cu 1 sau 0
 2. Cauta pe baza CRN in [UK Registery](https://find-and-update.company-information.service.gov.uk/) pentru datele companiei
 3. Scrap the site pentru datele companiei (Nume, adresa)
@@ -33,10 +35,13 @@
 
 ### Probleme gasite
 
-1. Website-ul HMRC poate aplica restrictii pentru volume mari, este nevoie de un API
-2. Majoritatea VAT number generate sunt valide, insa nu duc spre nicio companie
+1. Website-ul HMRC poate aplica restrictii pentru volume mari de requests, este nevoie de un API
+2. API HMRC pentru verificarea VAT number nu este fezabil un test app
+3. Majoritatea VAT number generate sunt valide, insa nu duc spre nicio companie
 
 ### Functionare
+
+#### START -> Genereaza VAT numbers -> Verifica numerele generate pe site-ul HMRC -> salveaza rezultatele -> END
 
 1. Genereaza VAT numbers;
     1. poate contine sau nu GB, urmate de 9 cifre

@@ -1,4 +1,5 @@
 import random
+import requests
 
 SAMPLE_SIZE = 10000
 
@@ -35,7 +36,7 @@ def check_checksum_vat(number: str) -> bool:
     return remainder in (0, 42, 55)
 
 
-def request_hmrc(number):
+def request_hmrc(vat_number):
     pass
 
 
