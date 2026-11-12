@@ -15,13 +15,14 @@ class Company:
         def __str__(self) -> str:
             return f"{self.street_name} {self.number}"
 
-    def __init__(self, vat_number):
+    def __init__(self, vat_number=None):
         self.vat_number = vat_number
+        self.number = None
         self.name = None
-        self.address = None
+        self.address: Company.Address | None = None
 
     def __str__(self) -> str:
-        return f"Company {self.name}, at address {self.address}, with VAT number: {self.vat_number}"
+        return f"Company {self.name}, at address {self.address}, with VAT number: {self.vat_number} and company number {self.number}"
 
 
 MOCK_NAMES = [

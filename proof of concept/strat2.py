@@ -29,7 +29,7 @@ if __name__ == "__main__":
             continue
 
     # show stats
-    print(" ")
+    print("")
     print(f"total numbers generated: {total_vat_numbers_made}")
     print(f"valid vat numbers : {len(valid_companies)}")
     print(f"invalid vat numbers: {total_vat_numbers_made - len(valid_companies)}")
