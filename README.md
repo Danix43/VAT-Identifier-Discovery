@@ -31,6 +31,11 @@
 
 - Strategia asta gaseste doar companiile care un VAT number valabil
 
+### Probleme gasite
+
+1. Website-ul HMRC poate aplica restrictii pentru volume mari, este nevoie de un API
+2. Majoritatea VAT number generate sunt valide, insa nu duc spre nicio companie
+
 ### Functionare
 
 1. Genereaza VAT numbers;
