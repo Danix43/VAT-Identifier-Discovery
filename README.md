@@ -1,87 +1,87 @@
-# Scopul: Daca poate fi construit un dataset cu numerele de TVA al firmelor din UK?
+# Goal: Can a dataset be built with the VAT numbers of UK companies?
 
 ## Research
 
-### Puncte de pornire
+### Starting points
 
-### Ideea 1
+### Idea 1
 
-- Dateset-ul pus la dispozitie de [Companies House](https://download.companieshouse.gov.uk/en_output.html) contine date generale despre firme, fara sa includa un website sau un numar VAT. Poate fi folosit pentru a construi o baza initiala, care poate fi procesata mai departe.
-- Cautarea fiecarei companii din dataset-ul CH printr-un motor de cautare poate fi atat de durata, cat si foarte costisitoare, daca se considera un API.
-  - Considerand 8.000.000 de query-uri (exista aproximativ 4.000.000 de companii, cu 2 incercari de cautare), iar API-ul de la Google cere 5 USD per 1000 de query-uri, egaleaza un cost de 40k USD aproximativ.
-- Considerand un scenariu ideal, unde fiecare afacere are un website functional si este gasit, site-ul trebuie cautat pentru numarul VAT, daca acesta exista.
-  - O problema evidenta este structura website-urilor, care difera si pentru care programul trebuie adaptat.
-  - O varianta cu sanse crescute de reusita este localizarea numarului prin `Regex`, daca numarul exista oriunde pe pagina initiala.
-  - Daca nu este gasit pe pagina initiala, trebuie cautat in paginile de `Contact`, `Terms and Conditions`, `Privacy Policy`, etc
+- The dataset provided by [Companies House](https://download.companieshouse.gov.uk/en_output.html) contains general company data without a website or VAT number. It can be used to create an initial database that can be processed further.
+- Searching each company in the CH dataset through a search engine can be both time-consuming and very expensive, especially when considering an API.
+  - Considering 8,000,000 queries (there are approximately 4,000,000 companies, with 2 search attempts each), and the Google API charges $5 per 1,000 queries, this equals an estimated cost of around $40k.
+- In an ideal scenario, where each business has a working website and is found, the site must be searched for the VAT number if it exists.
+  - An obvious challenge is the varying structure of websites, which the program must adapt to.
+  - A higher-success option is locating the number via `Regex` if the VAT number appears anywhere on the homepage.
+  - If it is not found on the homepage, it must be searched for on the `Contact`, `Terms and Conditions`, `Privacy Policy`, etc. pages.
 
-### Ideea 2
+### Idea 2
 
-- Numarul VAT urmeaza o structura predictibila, si care poate fi verificata.
-  - 9 cifre, care pot fi precedate de `GB`
-- Astfel, pot fi generate toate combinatiile valide. Codurile valide pot fi dupa verificate prin API-ul [HMRC](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/vat-registered-companies-api/2.0), care ofera date ale companiei precum nume si adresa.
-  - Varianta aceasta este predispusa la costuri mari, in special datorita nevoii folosirii API-ului extern pentru verificare numerelor generate.
-- Dar acesta varianta **poate** creea o lista completa cu toate afacerile existente si valide.
+- The VAT number follows a predictable structure that can be validated.
+  - 9 digits, which may be preceded by `GB`
+- Thus, all generated combinations can be validated. Valid codes can then be checked through the [HMRC](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/vat-registered-companies-api/2.0) API, which provides company data such as name and address.
+  - This variant is prone to high costs, especially due to the need to use an external API to verify generated numbers.
+- But this approach can create a complete list of all existing and valid businesses.
 
 ### General Notes
 
-- Nu exista, pentru UK cel putin, o baza universala si accesibila liber care sa contina date ale companiilor impreuna cu VAT number
-- Nu exista un consensus in ceea ce priveste afisarea numarului VAT pe site-uri
-- Pe site-ul [UK Registery](https://find-and-update.company-information.service.gov.uk/) nu este afisat numarul VAT
+- There is no universal, freely accessible database for the UK that contains company details together with VAT numbers.
+- There is no consensus on how VAT numbers are displayed on websites.
+- On the [UK Registry](https://find-and-update.company-information.service.gov.uk/) website, the VAT number is not displayed.
 
 ## Proof of Concept
 
-## [Strategia 1](./strat1.py)
+## [Strategy 1](./strat1.py)
 
-### Functionare
-
----
-
-#### START -> Genereaza CRN numbers -> Cauta numerele generate in Uk Registery -> Cauta site-ul daca exista o companie valida -> Scrap the site pentru VAT number -> Verifica VAT number pe HMRC -> Salveaza rezultatele -> END
+### How it works
 
 ---
 
-1. Genereaza Company Registragion Numbers (CRNs); 8 chars long, poate incepe cu 1 sau 0
-2. Cauta pe baza CRN in [UK Registery](https://find-and-update.company-information.service.gov.uk/) pentru datele companiei
-3. Scrap the site pentru datele companiei (Nume, adresa)
-4. Cauta site-ul companiei
-5. Daca exista site-ul cauta VAT number-ul
-6. Verifica VAT number prin aplicatia [HMRC](https://www.gov.uk/check-uk-vat-number)
-7. Rezultatul cautarii este salvat intr-un fisier
+#### START -> Generate CRN numbers -> Search generated numbers in the UK Registry -> Search for the website if a valid company exists -> Scrape the website for the VAT number -> Verify the VAT number in HMRC -> Save the results -> END
+
+---
+
+1. Generate Company Registration Numbers (CRNs); 8 characters long, may begin with 1 or 0
+2. Search the CRN in the [UK Registry](https://find-and-update.company-information.service.gov.uk/) for the company details
+3. Scrape the website for company details (name, address)
+4. Search the company's website
+5. If the website exists, look for the VAT number
+6. Verify the VAT number via the [HMRC](https://www.gov.uk/check-uk-vat-number) application
+7. The search result is saved to a file
 
 ### Notes
 
-- Numele companiei trebuie sa contina tipul ei - Limited, LTD = Limited Company
-  - Asta poate fi utila in cazul unei sortari dupa tipul de firma necesar
-- Poate realiza o lista mult mai completa a companiilor
-- Este mult mai cost intensive si este mai predispusa la rezultate inconcludente
+- The company name should include its type - Limited, LTD = Limited Company
+  - This can be useful for sorting by company type when needed
+- It can produce a much more complete list of companies
+- It is more cost-intensive and more prone to inconclusive results
 
-## [Strategia 2](./strat2.py)
+## [Strategy 2](./strat2.py)
 
-### Functionare
-
----
-
-#### START -> Genereaza VAT numbers -> Verifica numerele generate pe site-ul HMRC -> salveaza rezultatele -> END
+### How it works
 
 ---
 
-1. Genereaza VAT numbers;
-    1. poate contine sau nu GB, urmate de 9 cifre
-    2. VAT numbers-urile generate trebuiesc validate
-2. Verifica numerele valide cu [HMRC](https://www.gov.uk/check-uk-vat-number)
-    1. Site-ul HMRC ofera numele si adresa companiei
-3. Salveaza rezultatele intr-un fisier
+#### START -> Generate VAT numbers -> Verify generated numbers on the HMRC website -> save results -> END
+
+---
+
+1. Generate VAT numbers;
+    1. may or may not include GB, followed by 9 digits
+    2. Generated VAT numbers must be validated
+2. Verify valid numbers with [HMRC](https://www.gov.uk/check-uk-vat-number)
+    1. The HMRC website provides the company's name and address
+3. Save the results to a file
 
 ### Notes
 
-- Strategia asta gaseste doar companiile care un VAT number valabil
+- This strategy only finds companies with a valid VAT number
 
-### Probleme gasite
+### Problems found
 
-1. Website-ul HMRC poate aplica restrictii pentru volume mari de requests, este nevoie de un API care ridica costuri
-2. API HMRC pentru verificarea VAT number nu este fezabil un test app. Este disponibil doar un sandbox limitat
-3. Majoritatea VAT number generate sunt valide, insa nu duc spre nicio companie
+1. The HMRC website may impose restrictions on large numbers of requests, requiring an API that raises costs
+2. The HMRC VAT number verification API is not feasible for app testing. It is available only in a limited sandbox
+3. Most generated VAT numbers are valid but do not correspond to any company
 
 ## Real world application
 
-Cea mai buna varianta, in perspectiva mea, utilizarea unor API-uri existente, precum HMRC, prin care sunt cautate numere VAT generate. Varianta de web crawling poate fi mult mai costisitoare si cu o rata de fail mult mai ridicata decat costul pentru API acces.
+In my opinion, the best option is to use existing APIs such as HMRC to search generated VAT numbers. The web crawling approach can be much more costly and has a much higher failure rate than the API access cost.
